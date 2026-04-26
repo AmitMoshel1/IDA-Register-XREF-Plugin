@@ -254,7 +254,7 @@ class RegXrefDialog(QtWidgets.QDialog):
             self._table.setItem(r, 2, QtWidgets.QTableWidgetItem(addr_label))
             self._table.setItem(r, 3, QtWidgets.QTableWidgetItem(disasm))
             # store ea in the first column item for retrieval
-            self._table.item(r, 0).setData(Qt.UserRole, ea)
+            self._table.item(r, 0).setData(Qt.UserRole, str(ea))
 
             if direction == "Up" and first_up < 0:
                 first_up = r
@@ -275,13 +275,13 @@ class RegXrefDialog(QtWidgets.QDialog):
         if row < 0:
             return -1
         item = self._table.item(row, 0)
-        return item.data(Qt.UserRole) if item else -1
+        return int(item.data(Qt.UserRole)) if item else -1
 
     def _on_activate(self, row: int, _col: int):
         """Double-click or Enter: navigate and close."""
         item = self._table.item(row, 0)
         if item:
-            ida_kernwin.jumpto(item.data(Qt.UserRole))
+            ida_kernwin.jumpto(int(item.data(Qt.UserRole)))
         self.accept()
 
     def _on_row_change(self, row: int, _col, _prev, _pc):
